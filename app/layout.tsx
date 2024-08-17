@@ -20,7 +20,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
-          {children}
+          <div className="hidden lg:block">
+            {children}
+          </div>
+          <div className="flex lg:hidden w-full h-screen items-center justify-center px-4">
+            <h1 className="text-xl font-bold text-center">Please use desktop version for the best experience.</h1>
+          </div>
         </Providers>
         <Toaster />
       </body>
