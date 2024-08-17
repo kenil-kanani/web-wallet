@@ -41,7 +41,8 @@ function CreateWallet() {
                     <div>
                         <Button
                             onClick={generateNewWallet}
-                            className="w-full  font-bold py-2 px-4 rounded"
+                            className={`w-full font-bold py-2 px-4 rounded ${walletCreated && 'cursor-not-allowed'}`}
+                            disabled={walletCreated}
                         >
                             Create New Wallet
                         </Button>
