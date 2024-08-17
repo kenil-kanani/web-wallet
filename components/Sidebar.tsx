@@ -68,7 +68,9 @@ function Sidebar({ selectedAccountIndex, setSelectedAccountIndex }: SidebarProps
         }
     };
     return (
-        <div className="flex flex-col justify-between sticky h-screen w-64 border-r border-gray-700 text-white">
+        <div
+            className="flex flex-col justify-between sticky h-screen w-64 border-r border-neutral-700 text-white"
+        >
             <div>
                 <div className="p-4 w-full flex justify-center">
                     <h1 className="text-2xl font-bold mb-4">Crypto Wallet</h1>
@@ -78,8 +80,9 @@ function Sidebar({ selectedAccountIndex, setSelectedAccountIndex }: SidebarProps
                         accounts.length > 0 && accounts.map((account, index) => (
                             <Button
                                 variant="outline"
-                                className=" bg-gray-800 hover:bg-gray-700 font-bold py-2 px-4 mx-4 rounded"
+                                className=" bg-neutral-900 hover:bg-neutral-800 font-bold py-2 px-4 mx-4 rounded"
                                 key={index}
+                                onClick={() => setSelectedAccountIndex(index)}
                             >
                                 Account {index + 1}
                             </Button>

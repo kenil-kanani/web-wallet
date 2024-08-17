@@ -10,7 +10,7 @@ function CreateAccount() {
     return (
         <div className="flex">
             <Sidebar selectedAccountIndex={selectedAccountIndex} setSelectedAccountIndex={setSelectedAccountIndex} />
-            <AccountInfo />
+            <AccountInfo selectedAccountIndex={selectedAccountIndex} />
         </div>
     );
 }
