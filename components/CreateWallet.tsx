@@ -34,6 +34,13 @@ function CreateWallet() {
         }
     };
 
+    const handleCancel = () => {
+        setWalletCreated(false);
+        setWalletImported(false);
+        setImportedMnemonic('');
+        setTempMnemonic('');
+    }
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen ">
             <div className="p-8 rounded-lg w-full max-w-5xl">
@@ -51,14 +58,14 @@ function CreateWallet() {
                         </div>
                     }
                     {
-                        walletCreated && <DisplayMnemonic mnemonic={tempMnemonic.split(" ")} />
+                        walletCreated && <DisplayMnemonic handleCancel={handleCancel} tempMnemonic={tempMnemonic.split(" ")} />
                     }
                     <div className="flex items-center">
                         <div className="flex-grow border-t border-gray-300"></div>
                         <span className="flex-shrink mx-4 text-gray-600">or</span>
                         <div className="flex-grow border-t border-gray-300"></div>
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                         <Input
                             type="text"
                             placeholder="Enter your mnemonic phrase"
@@ -68,20 +75,13 @@ function CreateWallet() {
                         />
                         <Button
                             onClick={importWallet}
-                            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                            variant={'default'}
+                            className="w-full font-bold py-2 px-4 rounded"
                         >
                             Import Wallet
                         </Button>
                     </div>
                 </div>
-                {/* {(walletCreated || walletImported) && (
-                    <div className="mt-6 p-4 bg-gray-100 rounded-md">
-                        <h2 className="text-xl font-semibold mb-2 text-gray-800">
-                            {walletCreated ? 'New Wallet Created' : 'Wallet Imported'}
-                        </h2>
-                        <p className="text-sm text-gray-600 break-words">{mnemonic}</p>
-                    </div>
-                )} */}
             </div>
         </div>
     )

@@ -4,17 +4,25 @@ import { EyeIcon } from 'lucide-react'
 import { useToast } from "@/components/ui/use-toast"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from './ui/button'
+import useLocalStorage from 'use-local-storage'
 
-function DisplayMnemonic({ mnemonic }: {
-    mnemonic: string[]
+function DisplayMnemonic({ tempMnemonic, handleCancel }: {
+    tempMnemonic: string[]
+    handleCancel: () => void
 }) {
     const [isVisible, setIsVisible] = useState(false)
+    const [mnemonic, setMnemonic] = useLocalStorage<string>('mnemonic', '');
     const { toast } = useToast()
+    const [isChecked, setIsChecked] = useState(false)
 
     const handleCopy = () => {
         if (isVisible) {
-            navigator.clipboard.writeText(mnemonic.join(' '))
+            navigator.clipboard.writeText(tempMnemonic.join(' '))
         }
+    }
+
+    const handleContinue = () => {
+        setMnemonic(tempMnemonic.join(' '));
     }
 
     return (
@@ -41,7 +49,7 @@ function DisplayMnemonic({ mnemonic }: {
                     </div>
                 </div>
                 <div className={`grid grid-cols-3 gap-4 p-4 ${isVisible ? '' : 'blur-sm'}`}>
-                    {mnemonic.map((word, index) => (
+                    {tempMnemonic.map((word, index) => (
                         <Badge key={index} variant="secondary" className="text-lg p-2">
                             <span className="font-bold mr-2">{index + 1}.</span>
                             {word}
@@ -55,22 +63,28 @@ function DisplayMnemonic({ mnemonic }: {
                 )}
             </div>
 
-            {isVisible && (
-                <div>
-                    <div className="flex items-center justify-center space-x-2 mt-10">
-                        <Checkbox id="createWallet" />
-                        <label
-                            htmlFor="createWallet"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                            I agree that I have saved the mnemonic phrase and I understand the risks of losing access to my wallet if I forget my password.
-                        </label>
-                    </div>
-                    <div className='flex justify-center'>
-                        <Button className='min-w-80 mt-10 mx-auto'>Continue</Button>
-                    </div>
+            <div>
+                <div className="flex justify-center items-start space-x-2 mt-10">
+                    <Checkbox
+                        id="createWallet"
+                        checked={isChecked}
+                        onCheckedChange={(checked) => setIsChecked(checked as boolean)}
+                    />
+                    <label
+                        htmlFor="createWallet"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        I agree that I have saved the mnemonic phrase and I understand the risks of losing access to my wallet if I forget my password.
+                    </label>
                 </div>
-            )}
+                <p className='text-sm text-gray-500 mt-4 text-center'>
+                    Please save the mnemonic phrase in a secure location. You will not able to continue without it. To continue, click on the eye icon to reveal the phrase and click on the checkbox and click continue.
+                </p>
+                <div className='flex justify-center mt-10 flex-wrap gap-4'>
+                    <Button variant={'destructive'} onClick={handleCancel} className='min-w-80  mx-auto'>Cancel</Button>
+                    <Button className='min-w-80  mx-auto' disabled={!isChecked || !isVisible} onClick={handleContinue}>Continue</Button>
+                </div>
+            </div>
         </>
     )
 }
