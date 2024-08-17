@@ -1,5 +1,6 @@
 'use client';
 
+import CreateAccount from "@/components/CreateAccount";
 import CreateWallet from "@/components/CreateWallet";
 import { useEffect, useState } from "react";
 import useLocalStorage from "use-local-storage";
@@ -8,7 +9,7 @@ import useLocalStorage from "use-local-storage";
 export default function Home() {
 
   const [isClient, setIsClient] = useState(false);
-  const [mnemonic, setMnemonic] = useLocalStorage<string>('mnemonic', '');
+  const [seed, setSeed] = useLocalStorage<string>('seed', '');
 
   useEffect(() => {
     setIsClient(true);
@@ -19,12 +20,10 @@ export default function Home() {
   }
   return (
 
-    mnemonic === '' ?
+    seed === '' ?
       <CreateWallet />
       : (
-        <div>
-          UI of fetching the wallet details
-        </div>
+        <CreateAccount />
       )
   );
 }

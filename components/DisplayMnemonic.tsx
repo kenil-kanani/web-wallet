@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge"
 import { EyeIcon } from 'lucide-react'
 import { useToast } from "@/components/ui/use-toast"
 import { Checkbox } from "@/components/ui/checkbox"
+import { mnemonicToSeedSync } from 'bip39';
 import { Button } from './ui/button'
 import useLocalStorage from 'use-local-storage'
 
@@ -11,6 +12,7 @@ function DisplayMnemonic({ tempMnemonic, handleCancel }: {
     handleCancel: () => void
 }) {
     const [isVisible, setIsVisible] = useState(false)
+    const [seed, setSeed] = useLocalStorage<string>('seed', '');
     const [mnemonic, setMnemonic] = useLocalStorage<string>('mnemonic', '');
     const { toast } = useToast()
     const [isChecked, setIsChecked] = useState(false)
@@ -22,7 +24,10 @@ function DisplayMnemonic({ tempMnemonic, handleCancel }: {
     }
 
     const handleContinue = () => {
-        setMnemonic(tempMnemonic.join(' '));
+        const joinedMnemonic = tempMnemonic.join(' ');
+        setMnemonic(joinedMnemonic);
+        const seed = mnemonicToSeedSync(joinedMnemonic);
+        setSeed(seed.toString('hex'));
     }
 
     return (
