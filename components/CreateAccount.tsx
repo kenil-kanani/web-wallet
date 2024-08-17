@@ -1,13 +1,26 @@
+
+
 import React, { useState } from 'react';
 import nacl from "tweetnacl";
 import * as bip39 from 'bip39';
-import { Keypair } from '@solana/web3.js';
+import { Keypair, PublicKey } from '@solana/web3.js';
 import { derivePath } from 'ed25519-hd-key';
 import useLocalStorage from 'use-local-storage';
+import { keccak256 } from 'js-sha3';
+import HDKey from 'hdkey';
+import bs58 from 'bs58';
 
 interface Account {
-    // ethereum: string;
-    solana: string;
+    ethereum: {
+        address: string;
+        publicKey: string;
+        privateKey: string;
+    };
+    solana: {
+        address: string;
+        publicKey: string;
+        privateKey: string;
+    };
 }
 
 function CreateAccount() {
@@ -17,29 +30,35 @@ function CreateAccount() {
 
     const generateAccount = () => {
         try {
-            const mnemonic = bip39.entropyToMnemonic(seed);
-
-            // Generate Ethereum address
+            // Generate Ethereum address and keys
+            const seedBuffer = Buffer.from(seed, 'hex');
+            const hdkey = HDKey.fromMasterSeed(seedBuffer);
             const ethPath = `m/44'/60'/0'/0/${accountIndex}`;
-            const ethSeed = derivePath(ethPath, bip39.mnemonicToSeedSync(mnemonic).toString('hex'));
-            const ethKeyPair = nacl.sign.keyPair.fromSeed(ethSeed.key.slice(0, 32));
-            const ethPublicKey = Buffer.from(ethKeyPair.publicKey).slice(1);
-            // const ethAddress = '0x' + keccak256(ethPublicKey).slice(-40);
+            const ethWallet = hdkey.derive(ethPath);
+            const ethPublicKey = ethWallet.publicKey;
+            const ethPrivateKey = ethWallet.privateKey;
+            const ethAddress = '0x' + keccak256(ethPublicKey.slice(1)).slice(-40);
 
-            // Generate Solana address
+            // Generate Solana address and keys
             const solPath = `m/44'/501'/${accountIndex}'/0'`;
             const solSeed = derivePath(solPath, seed).key;
             const solKeypair = Keypair.fromSeed(solSeed);
 
-            console.log('solKeypair : ', solKeypair);
+            const newAccount: Account = {
+                ethereum: {
+                    address: ethAddress,
+                    publicKey: '0x' + ethPublicKey.toString('hex'),
+                    privateKey: '0x' + ethPrivateKey.toString('hex'),
+                },
+                solana: {
+                    address: solKeypair.publicKey.toString(),
+                    publicKey: new PublicKey(solKeypair.publicKey).toString(),
+                    privateKey: bs58.encode(solKeypair.secretKey),
+                },
+            };
 
-            // const newAccount: Account = {
-            // ethereum: ethAddress,
-            // solana: solKeypair.publicKey.toString(),
-            // };
-
-            // setAccounts([...accounts, newAccount]);
-            // setAccountIndex(accountIndex + 1);
+            setAccounts([...accounts, newAccount]);
+            setAccountIndex(accountIndex + 1);
         } catch (error) {
             console.error('Error generating account:', error);
             // Handle error (e.g., show error message to user)
@@ -48,13 +67,6 @@ function CreateAccount() {
 
     return (
         <div>
-            <h2>Create Accounts for Ethereum and Solana</h2>
-            <input
-                type="text"
-                placeholder="Enter seed (hex format)"
-                value={seed}
-                onChange={(e) => setSeed(e.target.value)}
-            />
             <button onClick={generateAccount}>Generate New Account</button>
             {accounts.length > 0 && (
                 <div>
@@ -62,8 +74,14 @@ function CreateAccount() {
                     {accounts.map((account, index) => (
                         <div key={index}>
                             <h4>Account {index + 1}</h4>
-                            {/* <p>Ethereum: {account.ethereum}</p> */}
-                            <p>Solana: {account.solana}</p>
+                            <h5>Ethereum</h5>
+                            <p>Address: {account.ethereum.address}</p>
+                            <p>Public Key: {account.ethereum.publicKey}</p>
+                            <p>Private Key: {account.ethereum.privateKey}</p>
+                            <h5>Solana</h5>
+                            <p>Address: {account.solana.address}</p>
+                            <p>Public Key: {account.solana.publicKey}</p>
+                            <p>Private Key: {account.solana.privateKey}</p>
                         </div>
                     ))}
                 </div>
