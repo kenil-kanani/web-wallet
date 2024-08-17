@@ -20,7 +20,12 @@ interface Account {
     };
 }
 
-function Sidebar() {
+interface SidebarProps {
+    selectedAccountIndex: number;
+    setSelectedAccountIndex: (index: number) => void;
+}
+
+function Sidebar({ selectedAccountIndex, setSelectedAccountIndex }: SidebarProps) {
     const [seed, setSeed] = useLocalStorage<string>('seed', '');
     const [accounts, setAccounts] = useLocalStorage<Account[]>('accounts', []);
     const [accountIndex, setAccountIndex] = useState(accounts.length);
@@ -68,12 +73,12 @@ function Sidebar() {
                 <div className="p-4 w-full flex justify-center">
                     <h1 className="text-2xl font-bold mb-4">Crypto Wallet</h1>
                 </div>
-                <div className="flex flex-col max-h-screen/2 overflow-y-auto">
+                <div className="flex flex-col gap-3 max-h-screen/2 overflow-y-auto">
                     {
                         accounts.length > 0 && accounts.map((account, index) => (
                             <Button
                                 variant="outline"
-                                className=" bg-gray-700 font-bold py-2 px-4 mx-4 rounded"
+                                className=" bg-gray-800 hover:bg-gray-700 font-bold py-2 px-4 mx-4 rounded"
                                 key={index}
                             >
                                 Account {index + 1}
