@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import nacl from "tweetnacl";
 import * as bip39 from 'bip39';
@@ -17,7 +16,6 @@ interface Account {
         privateKey: string;
     };
     solana: {
-        address: string;
         publicKey: string;
         privateKey: string;
     };
@@ -25,7 +23,7 @@ interface Account {
 
 function CreateAccount() {
     const [seed, setSeed] = useLocalStorage<string>('seed', '');
-    const [accounts, setAccounts] = useState<Account[]>([]);
+    const [accounts, setAccounts] = useLocalStorage<Account[]>('accounts', []);
     const [accountIndex, setAccountIndex] = useState(0);
 
     const generateAccount = () => {
@@ -51,7 +49,6 @@ function CreateAccount() {
                     privateKey: '0x' + ethPrivateKey.toString('hex'),
                 },
                 solana: {
-                    address: solKeypair.publicKey.toString(),
                     publicKey: new PublicKey(solKeypair.publicKey).toString(),
                     privateKey: bs58.encode(solKeypair.secretKey),
                 },
@@ -79,7 +76,6 @@ function CreateAccount() {
                             <p>Public Key: {account.ethereum.publicKey}</p>
                             <p>Private Key: {account.ethereum.privateKey}</p>
                             <h5>Solana</h5>
-                            <p>Address: {account.solana.address}</p>
                             <p>Public Key: {account.solana.publicKey}</p>
                             <p>Private Key: {account.solana.privateKey}</p>
                         </div>
