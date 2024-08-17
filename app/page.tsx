@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { generateMnemonic , mnemonicToSeedSync } from 'bip39';
 import { useState } from 'react';
 
@@ -15,7 +16,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1>Hello World</h1>
-      <button onClick={generateMnemonicHandler}>Generate Mnemonic</button>
+      <Button onClick={generateMnemonicHandler}>Generate Mnemonic</Button>
       <p>{mnemonic}</p>
     </div>
   );
