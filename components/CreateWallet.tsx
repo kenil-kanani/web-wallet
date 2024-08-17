@@ -7,6 +7,7 @@ import useLocalStorage from 'use-local-storage';
 import { useState } from 'react';
 import DisplayMnemonic from './DisplayMnemonic';
 
+
 function CreateWallet() {
 
     const [mnemonic, setMnemonic] = useLocalStorage<string>('mnemonic', '');
@@ -38,15 +39,17 @@ function CreateWallet() {
             <div className="p-8 rounded-lg w-full max-w-5xl">
                 <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Wallet Manager</h1>
                 <div className="space-y-6">
-                    <div>
-                        <Button
-                            onClick={generateNewWallet}
-                            className={`w-full font-bold py-2 px-4 rounded ${walletCreated && 'cursor-not-allowed'}`}
-                            disabled={walletCreated}
-                        >
-                            Create New Wallet
-                        </Button>
-                    </div>
+                    {
+                        !walletCreated && <div>
+                            <Button
+                                onClick={generateNewWallet}
+                                className={`w-full font-bold py-2 px-4 rounded ${walletCreated && 'cursor-not-allowed'}`}
+                                disabled={walletCreated}
+                            >
+                                Create New Wallet
+                            </Button>
+                        </div>
+                    }
                     {
                         walletCreated && <DisplayMnemonic mnemonic={tempMnemonic.split(" ")} />
                     }
