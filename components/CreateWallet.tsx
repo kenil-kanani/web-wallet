@@ -3,11 +3,12 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from 'bip39';
+import useLocalStorage from 'use-local-storage';
 import { useState } from 'react';
 
 function CreateWallet() {
 
-    const [mnemonic, setMnemonic] = useState<string>('');
+    const [mnemonic, setMnemonic] = useLocalStorage<string>('mnemonic' , '');
     const [importedMnemonic, setImportedMnemonic] = useState<string>('');
     const [walletCreated, setWalletCreated] = useState<boolean>(false);
     const [walletImported, setWalletImported] = useState<boolean>(false);
