@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 function CreateWallet() {
 
-    const [mnemonic, setMnemonic] = useLocalStorage<string>('mnemonic' , '');
+    const [mnemonic, setMnemonic] = useLocalStorage<string>('mnemonic', '');
     const [importedMnemonic, setImportedMnemonic] = useState<string>('');
     const [walletCreated, setWalletCreated] = useState<boolean>(false);
     const [walletImported, setWalletImported] = useState<boolean>(false);
@@ -31,8 +31,8 @@ function CreateWallet() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <div className="p-8 bg-white rounded-lg shadow-md w-full max-w-md">
+        <div className="flex flex-col items-center justify-center min-h-screen ">
+            <div className="p-8 bg-white rounded-lg shadow-md w-full max-w-5xl">
                 <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Wallet Manager</h1>
                 <div className="space-y-6">
                     <div>
