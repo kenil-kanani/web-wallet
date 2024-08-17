@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import nacl from "tweetnacl";
-import { Keypair, PublicKey } from '@solana/web3.js';
+import { Keypair, PublicKey, Connection } from '@solana/web3.js';
 import { derivePath } from 'ed25519-hd-key';
 import useLocalStorage from 'use-local-storage';
 import { keccak256 } from 'js-sha3';
@@ -29,8 +29,6 @@ function Sidebar({ selectedAccountIndex, setSelectedAccountIndex }: SidebarProps
     const [seed, setSeed] = useLocalStorage<string>('seed', '');
     const [accounts, setAccounts] = useLocalStorage<Account[]>('accounts', []);
     const [accountIndex, setAccountIndex] = useState(accounts.length);
-
-
 
     const generateAccount = () => {
         try {
@@ -80,7 +78,7 @@ function Sidebar({ selectedAccountIndex, setSelectedAccountIndex }: SidebarProps
                         accounts.length > 0 && accounts.map((account, index) => (
                             <Button
                                 variant="outline"
-                                className=" bg-neutral-900 hover:bg-neutral-800 font-bold py-2 px-4 mx-4 rounded"
+                                className={`${selectedAccountIndex === index ? "bg-neutral-600" : "bg-neutral-900"} hover:bg-neutral-600 font-bold py-2 px-4 mx-4 rounded`}
                                 key={index}
                                 onClick={() => setSelectedAccountIndex(index)}
                             >
@@ -102,5 +100,6 @@ function Sidebar({ selectedAccountIndex, setSelectedAccountIndex }: SidebarProps
         </div>
     )
 }
+
 
 export default Sidebar
