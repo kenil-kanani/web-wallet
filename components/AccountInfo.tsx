@@ -43,7 +43,6 @@ function AccountInfo({ selectedAccountIndex }: AccountInfoProps) {
                 ethereumPrice={ethereumPrice}
             />
 
-            <MakeTransaction />
 
             <div className="flex flex-col bg-neutral-900 rounded-lg p-6 gap-4">
                 <CryptoCard
@@ -61,6 +60,9 @@ function AccountInfo({ selectedAccountIndex }: AccountInfoProps) {
                     toast={toast}
                 />
             </div>
+
+            <MakeTransaction selectedAccountIndex={selectedAccountIndex} />
+
         </div>
     )
 }

@@ -4,16 +4,53 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { PublicKey } from '@solana/web3.js';
+import useLocalStorage from 'use-local-storage'
+import { Account } from '@/types'
 
 function SendCoin({
+    selectedAccountIndex,
     coinName
 }: {
+    selectedAccountIndex: number,
     coinName: string
 }) {
 
     const [address, setAddress] = useState('');
     const [amount, setAmount] = useState('');
     const [isValidAddress, setIsValidAddress] = useState(true);
+    const [accounts, setAccounts] = useLocalStorage<Account[]>('accounts', []);
+    const [loading, setLoading] = useState(false);
+
+
+    const handleSendTransaction = async () => {
+        if (!isValidAddress || !amount) {
+            alert('Please enter a valid address and amount');
+            return;
+        }
+
+        let account = accounts[selectedAccountIndex];
+        setLoading(true);
+        try {
+            if (coinName === 'Ethereum') {
+                await sendEthereumTransaction(address, amount, account.ethereum.privateKey);
+            } else if (coinName === 'Solana') {
+                await sendSolanaTransaction();
+            }
+        } catch (error) {
+            console.log(error)
+            alert('Transaction failed. Please try again.');
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    async function sendEthereumTransaction(recipientAddress: any, amountInEther: any, privateKey: any) {
+        alert('Ethereum transactions are not yet implemented')
+    }
+
+    const sendSolanaTransaction = async () => {
+        alert('Solana transactions are not yet implemented');
+    };
 
     const validateAddress = (inputAddress: string) => {
         if (coinName === 'Ethereum') {
@@ -71,9 +108,12 @@ function SendCoin({
                 <Button variant={'destructive'} className='px-6'>
                     Cancel
                 </Button>
-                <Button className='flex gap-3 bg-indigo-600 hover:bg-indigo-700 px-6'>
+                <Button
+                    onClick={handleSendTransaction}
+                    disabled={loading}
+                    className='flex gap-3 bg-indigo-600 hover:bg-indigo-700 px-6'>
                     <Send className='text-white' />
-                    <span className='text-white'>Send {coinName}</span>
+                    <span className='text-white'>{loading ? 'Loading...' : 'Send' + coinName}</span>
                 </Button>
             </div>
         </div>

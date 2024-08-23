@@ -3,8 +3,12 @@ import SendCoin from './SendCoin'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChevronDown, ChevronUp } from 'lucide-react'
 
-function MakeTransaction() {
-    const [open, setOpen] = useState(true);
+function MakeTransaction({
+    selectedAccountIndex
+}: {
+    selectedAccountIndex: number
+}) {
+    const [open, setOpen] = useState(false);
 
     const toggleOpen = () => setOpen(!open);
 
@@ -25,8 +29,8 @@ function MakeTransaction() {
                         <TabsTrigger className='w-full' value="ethereum">Ethereum</TabsTrigger>
                         <TabsTrigger className='w-full' value="solana">Solana</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="ethereum"><SendCoin coinName='Ethereum' /></TabsContent>
-                    <TabsContent value="solana"><SendCoin coinName='Solana' /></TabsContent>
+                    <TabsContent value="ethereum"><SendCoin selectedAccountIndex={selectedAccountIndex} coinName='Ethereum' /></TabsContent>
+                    <TabsContent value="solana"><SendCoin selectedAccountIndex={selectedAccountIndex} coinName='Solana' /></TabsContent>
                 </Tabs>
             )}
         </div>
