@@ -8,6 +8,7 @@ import CryptoCard from './CryptoCard';
 import { useBalances } from '@/hooks/useBalances';
 import { useCryptoPrices } from '@/hooks/useCryptoPrices';
 import { Loader2 } from 'lucide-react';
+import MakeTransaction from './MakeTransaction';
 
 interface AccountInfoProps {
     selectedAccountIndex: number;
@@ -32,7 +33,7 @@ function AccountInfo({ selectedAccountIndex }: AccountInfoProps) {
     }
 
     return (
-        <div className="p-8 w-full">
+        <div className="p-8 w-full max-h-screen overflow-scroll">
             <h2 className="text-2xl font-bold mb-6">Account Info</h2>
 
             <TotalBalance
@@ -41,6 +42,8 @@ function AccountInfo({ selectedAccountIndex }: AccountInfoProps) {
                 solanaPrice={solanaPrice}
                 ethereumPrice={ethereumPrice}
             />
+
+            <MakeTransaction />
 
             <div className="flex flex-col bg-neutral-900 rounded-lg p-6 gap-4">
                 <CryptoCard
